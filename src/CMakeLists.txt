@@ -7,5 +7,5 @@ if(${REPLACE_MALLOC})
     target_link_libraries(list CppUTest CppUTestExt)
 endif()
 
-install(TARGETS list DESTINATION ${CMAKE_SOURCE_DIR}/lib)
-install(FILES include/list/list.h DESTINATION ${CMAKE_SOURCE_DIR}/include/list)
+install(TARGETS list ${CMAKE_INSTALL_PREFIX}/lib)
+install(FILES include/list/list.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/list)
