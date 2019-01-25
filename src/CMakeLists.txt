@@ -8,4 +8,4 @@ if(${REPLACE_MALLOC})
 endif()
 
 install(TARGETS list DESTINATION lib)
-install(FILES include/list/list.h DESTINATION include)
+install(FILES include/list/list.h DESTINATION include/list)
