@@ -268,6 +268,30 @@ int list_isempty(const list self)
     return empty;
 }
 
+int list_find_index(const list self, const void *element, int (*cmp)(const void *, const void*))
+{
+    int i;
+    int index = -2;
+    size_t size;
+    void *cmp_element = malloc(self->element_size);
+
+    if (self && element && cmp_element) {
+        size = list_size(self);
+        for(i = 0; i < size; i++) {
+            list_get(self, cmp_element, i);
+            if (cmp(element, cmp_element)) {
+                index = i;
+                break;
+            }
+        }
+    } else {
+        index = -1;
+    }
+
+    free(cmp_element);
+    return index;
+}
+
 static node *alloc_node(const void *data, const size_t element_size)
 {
     node *self = malloc(sizeof(*self));

@@ -4,7 +4,6 @@ add_library(list_test EXCLUDE_FROM_ALL list_test.cpp)
 target_include_directories(list_test PRIVATE ${CMAKE_SOURCE_DIR}/src/include)
 target_link_libraries(list_test list)
 target_link_libraries(list_test CppUTest CppUTestExt)
-
 add_executable(run_all_tests EXCLUDE_FROM_ALL run_all_tests.cpp)
 
 target_link_libraries(run_all_tests list_test)

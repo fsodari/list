@@ -17,5 +17,6 @@ int list_set(const list self, const void *element, const size_t index);
 size_t list_size(const list self);
 int list_empty(list self);
 int list_isempty(const list self);
+int list_find_index(const list self, const void *element, int (*cmp)(const void *, const void*));
 
 #endif

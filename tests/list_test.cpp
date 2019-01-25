@@ -332,3 +332,49 @@ TEST(LIST, isempty)
     isempty = list_isempty(dut);
     CHECK_EQUAL(1, isempty);
 }
+
+static int cmp(const void *s1, const void *s2)
+{
+    test_data *first = (test_data*)s1;
+    test_data *second = (test_data*)s2;
+
+    if ((first->dat1 == second->dat1) && (first->dat2 == second->dat2)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+TEST(LIST, find_index)
+{
+    int error;
+    size_t index;
+    test_data td0 = {0,100}, td1 = {1,101}, td2 = {2,102}, td3 = {3,103}, td4 = {4,104};
+
+    error = list_append(dut, &td0);
+    CHECK_FALSE(error);
+    error = list_append(dut, &td1);
+    CHECK_FALSE(error);
+    error = list_append(dut, &td2);
+    CHECK_FALSE(error);
+    error = list_append(dut, &td3);
+    CHECK_FALSE(error);
+    error = list_append(dut, &td4);
+    CHECK_FALSE(error);
+
+    index = list_find_index(dut, &td0, cmp);
+    CHECK_EQUAL(0, index);
+    index = list_find_index(dut, &td1, cmp);
+    CHECK_EQUAL(1, index);
+    index = list_find_index(dut, &td2, cmp);
+    CHECK_EQUAL(2, index);
+    index = list_find_index(dut, &td3, cmp);
+    CHECK_EQUAL(3, index);
+    index = list_find_index(dut, &td4, cmp);
+    CHECK_EQUAL(4, index);
+}
+
+TEST(LIST, find)
+{
+    
+}
