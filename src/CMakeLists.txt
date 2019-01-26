@@ -7,5 +7,5 @@ if(${REPLACE_MALLOC})
     target_link_libraries(list CppUTest CppUTestExt)
 endif()
 
-install(TARGETS list DESTINATION lib)
+install(TARGETS list DESTINATION lib/list)
 install(FILES include/list/list.h DESTINATION include/list)
