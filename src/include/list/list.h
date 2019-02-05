@@ -1,12 +1,14 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include "iterator/iterator.h"
 #include <stdlib.h>
 
 typedef struct list_struct *list;
 
 list list_create(size_t element_size);
 void list_destroy(list self);
+iterator *list_create_iterator(list self);
 
 int list_append(list self, const void *element);
 int list_pop(list self, void *element);

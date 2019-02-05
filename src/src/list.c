@@ -1,5 +1,6 @@
 #include "list/list.h"
 #include <string.h>
+#include <stdio.h>
 
 typedef struct node_
 {
@@ -16,8 +17,26 @@ struct list_struct
     size_t size;
 };
 
+struct list_iterator
+{
+    iterator iter;
+    list the_list;
+    node *current;
+};
+
 static node *alloc_node(const void *data, const size_t element_size);
 static node *free_node(node *self);
+static void list_iterator_first(iterator *it);
+static void list_iterator_next(iterator *it);
+static int list_iterator_is_end(iterator *it);
+static void list_iterator_current(iterator *it, void *node);
+
+static struct iterator_ops list_it_ops = {
+        .first = list_iterator_first,
+        .next = list_iterator_next,
+        .is_end = list_iterator_is_end,
+        .current = list_iterator_current
+};
 
 list list_create(size_t element_size)
 {
@@ -41,6 +60,21 @@ void list_destroy(list self)
         }
     }
     free(self);
+}
+
+iterator *list_create_iterator(list self)
+{
+    struct list_iterator *iter = malloc(sizeof(*iter));
+
+    if (self && iter) {
+        iterator_init(&iter->iter);
+        iter->iter.ops = &list_it_ops;
+        iter->the_list = self;
+        iter->current = self->head;
+    }
+
+    // Nasty bad casting. boooo. Or you could return &iter->iter since they're the same address
+    return (iterator*)iter;
 }
 
 int list_append(list self, const void *element)
@@ -320,4 +354,49 @@ static node *free_node(node *self)
     }
 
     return next;
+}
+
+static void list_iterator_first(iterator *it_old)
+{
+    struct list_iterator *it = (struct list_iterator *)it_old;
+
+    if (it) {
+        it->current = it->the_list->head;
+    }
+}
+
+static void list_iterator_next(iterator *it_old)
+{
+    struct list_iterator *it = (struct list_iterator *)it_old;
+    if (it) {
+        if (it->current) {
+            it->current = it->current->next;
+        }
+    }
+}
+
+static int list_iterator_is_end(iterator *it_old)
+{
+    int is_end = -1;
+    struct list_iterator *it = (struct list_iterator *)it_old;
+
+    if (it) {
+        if (it->current) {
+            is_end = 0;
+        } else {
+            is_end = 1;
+        }
+    }
+
+    return is_end;
+}
+
+static void list_iterator_current(iterator *it_old, void *node)
+{
+    struct list_iterator *it = (struct list_iterator *)it_old;
+    if (it) {
+        if (it->current) {
+            memcpy(node, it->current->data, it->the_list->element_size);
+        }
+    }
 }

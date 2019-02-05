@@ -26,6 +26,24 @@ TEST_GROUP(LIST)
     void teardown()
     {
         list_destroy(dut);
+        MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    }
+};
+
+TEST_GROUP(LIST_IT)
+{
+    list dut;
+
+    void setup()
+    {
+        MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+        dut = list_create(sizeof(test_data));
+    }
+
+    void teardown()
+    {
+        list_destroy(dut);
+        MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
     }
 };
 
@@ -374,7 +392,32 @@ TEST(LIST, find_index)
     CHECK_EQUAL(4, index);
 }
 
-TEST(LIST, find)
+TEST(LIST_IT, anewtest)
 {
+    int error;
+    size_t size;
+    test_data td = {42, 43};
+    int i = 0;
 
+    iterator *it = list_create_iterator(dut);
+
+    for (int i = 0; i < 10; i++) {
+        size = list_size(dut);
+        CHECK_EQUAL(i, size);
+        td.dat1 = i;
+        error = list_append(dut, &td);
+        CHECK_FALSE(error);
+        size = list_size(dut);
+        CHECK_EQUAL(i+1, size);
+    }
+
+    iterator_first(it);
+    while (!iterator_is_end(it)) {
+        iterator_current(it, &td);
+        CHECK_EQUAL(i, td.dat1);
+        iterator_next(it);
+        i++;
+    }
+
+    iterator_destroy(it);
 }

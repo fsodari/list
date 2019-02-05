@@ -1,9 +1,12 @@
+find_package(iterator REQUIRED)
+
 add_library(list src/list.c)
 target_include_directories(list PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include/list>
         )
 target_include_directories(list PRIVATE src)
+target_link_libraries(list iterator)
 
 if(${REPLACE_MALLOC})
     target_compile_options(list PRIVATE -include  /usr/local/include/CppUTest/MemoryLeakDetectorMallocMacros.h)

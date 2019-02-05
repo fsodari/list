@@ -1,6 +1,7 @@
 #include <CppUTest/CommandLineTestRunner.h>
 
 IMPORT_TEST_GROUP(LIST);
+IMPORT_TEST_GROUP(LIST_IT);
 
 int main(int argc, const char** argv)
 {
