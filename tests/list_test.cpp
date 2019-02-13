@@ -419,5 +419,8 @@ TEST(LIST_IT, anewtest)
         i++;
     }
 
+    iterator_last(it);
+    while
+
     iterator_destroy(it);
 }

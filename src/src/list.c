@@ -27,13 +27,17 @@ struct list_iterator
 static node *alloc_node(const void *data, const size_t element_size);
 static node *free_node(node *self);
 static void list_iterator_first(iterator *it);
+static void list_iterator_last(iterator *it);
 static void list_iterator_next(iterator *it);
+static void list_iterator_prev(iterator *it);
 static int list_iterator_is_end(iterator *it);
 static void list_iterator_current(iterator *it, void *node);
 
 static struct iterator_ops list_it_ops = {
         .first = list_iterator_first,
+        .last = list_iterator_last,
         .next = list_iterator_next,
+        .prev = list_iterator_prev,
         .is_end = list_iterator_is_end,
         .current = list_iterator_current
 };
@@ -365,12 +369,31 @@ static void list_iterator_first(iterator *it_old)
     }
 }
 
+static void list_iterator_last(iterator *it_old)
+{
+    struct list_iterator *it = (struct list_iterator *)it_old;
+
+    if (it) {
+        it->current = it->the_list->tail;
+    }
+}
+
 static void list_iterator_next(iterator *it_old)
 {
     struct list_iterator *it = (struct list_iterator *)it_old;
     if (it) {
         if (it->current) {
             it->current = it->current->next;
+        }
+    }
+}
+
+static void list_iterator_prev(iterator *it_old)
+{
+    struct list_iterator *it = (struct list_iterator*)it_old;
+    if (it) {
+        if (it->current) {
+            it->current = it->current->prev;
         }
     }
 }
